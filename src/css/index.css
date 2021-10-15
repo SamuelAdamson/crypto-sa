@@ -1,0 +1,18 @@
+@font-face { /* Hind Siliguri Font */ 
+    font-family: 'Hind_Siliguri';
+    src: url('../fonts/hs/HindSiliguri-Medium.ttf'),
+         url('../fonts/hs/HindSiliguri-Bold.ttf'),
+         url('../fonts/hs/HindSiliguri-Light.ttf'),
+         url('../fonts/hs/HindSiliguri-Regular.ttf'),
+         url('../fonts/hs/HindSiliguri-SemiBold.ttf');
+}
+
+body {
+  margin: 0;
+  font-family: 'Hind_Siliguri';
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+}  

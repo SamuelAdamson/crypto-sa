@@ -16,7 +16,7 @@ const Home = () => {
                         <Col className="my-auto text-start">
                             <h1> Crypto </h1>
                             <h2> $2.49T  </h2>
-                            <h3> Crypto Market Cap </h3>
+                            <h3> Total Market Cap </h3>
                         </Col>
                         <Col>
                             <img src={ Coins } alt="Crypto Coins" />

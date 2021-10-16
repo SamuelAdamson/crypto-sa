@@ -1,8 +1,11 @@
 // Home Page -- Samuel Adamson
 import '../css/Home.css'
-import '../css/bootstrap.css'
-// React bootstrap elements
+// React elements
 import { Row, Col, Container } from 'react-bootstrap';
+import CountUp from 'react-countup';
+// Images
+import Coins from '../img/homeIcon.png';
+
 
 const Home = () => {
     return (
@@ -10,14 +13,16 @@ const Home = () => {
             <div className="splash">
                 <Container className="align-self-center">
                     <Row>
-                        <Col>
-                            <h1> crypto </h1>
+                        <Col className="my-auto text-start">
+                            <h1> Crypto </h1>
+                            <h2> $2.49T  </h2>
+                            <h3> Crypto Market Cap </h3>
                         </Col>
                         <Col>
-                            
+                            <img src={ Coins } alt="Crypto Coins" />
                         </Col>
                     </Row>
-                </Container>
+                </Container> 
             </div>
         </div>
     );

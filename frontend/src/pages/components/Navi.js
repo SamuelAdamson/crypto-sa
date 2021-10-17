@@ -17,7 +17,7 @@ const Navi = () => {
                     <div className="NavItem"> 
                             <NavLink exact to="/"> 
                                 <img src={ Site } alt="Site Home"
-                                    height="48"c
+                                    height="48"
                                 />
                             </NavLink>
                         </div>

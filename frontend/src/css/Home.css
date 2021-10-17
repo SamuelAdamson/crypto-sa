@@ -30,7 +30,19 @@
 .content {
     position: absolute;
     top: 0;
+    width: 100%;
     margin-top: 100vh;
+    padding-top: 7.5vh;
+    padding-bottom: 7.5vh;
+    text-align: start;
+}
+.content h1 {
+    color: #802bb1;
+    font-size: 5.5rem;
+}
+.content h2 {
+    color: #fff;
+    font-size: 2.5rem;
 }
 
 

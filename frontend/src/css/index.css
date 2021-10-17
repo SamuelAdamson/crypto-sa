@@ -1,15 +1,5 @@
-@font-face { /* Hind Siliguri Font */ 
-    font-family: 'Hind_Siliguri';
-    src: url('../fonts/hs/HindSiliguri-Medium.ttf'),
-         url('../fonts/hs/HindSiliguri-Bold.ttf'),
-         url('../fonts/hs/HindSiliguri-Light.ttf'),
-         url('../fonts/hs/HindSiliguri-Regular.ttf'),
-         url('../fonts/hs/HindSiliguri-SemiBold.ttf');
-}
-
 body {
   margin: 0;
-  font-family: 'Hind_Siliguri';
   background-color: #333333;
 }
 
@@ -31,11 +21,15 @@ code {
     transform: scale(1.1) translateY(-10%);
 }
 
-/* Fade in objects */
+/* CSS for Fader -- Fading in objects on scroll */
 .fader {
     opacity: 0;
-    transition: opacity 400ms ease-in;
+    transform: translateY(10vh);
+    visibility: hidden;
+    transition: opacity 1.3s ease, transform 1.3s ease;
 }
-.fader.appear {
+.fader.is-visible {
     opacity: 1;
+    transform: none;
+    visibility: visible;
 }

@@ -3,6 +3,11 @@ body {
   background-color: #333333;
 }
 
+/* Remove Text Decoration from links */
+a {
+    text-decoration: none;
+}
+
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
       monospace;
@@ -32,4 +37,34 @@ code {
     opacity: 1;
     transform: none;
     visibility: visible;
+}
+
+/* Footer */
+.Footer {
+    text-align: center;
+}
+.Footer .row {
+    margin-bottom: 1rem;
+}
+.Footer .list-group {
+    margin-bottom: 1.5rem;
+}
+.Footer .list-group-item {
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
+    transition: all ease 400ms;
+}
+.Footer .list-group-item:hover {
+    transform: scale(1.1);
+}
+.Footer h2 {
+    font-size: 2.2rem !important;
+}
+.Footer h3 {
+    font-size: 1.5rem;
+    transition: all ease 400ms;
+    animation: none;
+}
+.Footer h3:hover {
+    transform: scale(1.05);
 }

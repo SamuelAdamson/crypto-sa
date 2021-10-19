@@ -7,7 +7,7 @@ import Navi from './pages/components/Navi';
 import Home from './pages/Home';
 import Eth from './pages/Eth';
 import Btc from './pages/Btc';
-import Bnb from './pages/Bnb';
+import Ada from './pages/Ada';
 
 function App() {
     return (
@@ -19,7 +19,7 @@ function App() {
                     <Route exact path = "/" component={ Home } />
                     <Route exact path = "/ethereum" component={ Eth } />
                     <Route exact path = "/bitcoin" component={ Btc } />
-                    <Route exact path = "/binance" component={ Bnb } />
+                    <Route exact path = "/cardano" component={ Ada } />
                 </Switch>
             </Router>
 

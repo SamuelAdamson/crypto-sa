@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 // Images for navigation
 import ETH from '../../img/nav/eth.png';
 import BTC from '../../img/nav/btc.png';
-import BNB from '../../img/nav/bnb.png';
+import ADA from '../../img/nav/ada.png';
 import Site from '../../img/nav/site-logo.png';
 
 const Navi = () => {
@@ -37,8 +37,8 @@ const Navi = () => {
                             </NavLink>
                         </div>
                         <div className="NavItem"> 
-                            <NavLink exact to="/binance"> 
-                                <img src={ BNB } alt="Binance"
+                            <NavLink exact to="/cardano"> 
+                                <img src={ ADA } alt="Cardano"
                                     height="48" width="48"
                                 />
                             </NavLink>

@@ -10,6 +10,7 @@ const { request } = require('express');
 dotenv.config();
 // Helper Functions
 const helper = require('./helper');
+const e = require('express');
 
 // Store port
 PORT = process.env.PORT;
@@ -48,6 +49,55 @@ app.get('/totalCap', (req, res) => {
             }
         });
 });
+
+
+/* Handle Request for Ethereum,Bitcoin,Binance Current Price
+    -- Makes request to Nomics
+    -- Responds with Ethereum,Bitcoin,Binance Prices to 2 decimals */
+app.get('/tickers', (req, res) => {
+    // Set Ticker
+    let tick = 'ETH,BTC,ADA';
+    // API Url
+    let tickURL = `https://api.nomics.com/v1/currencies/ticker?key=${NOMICS_KEY}&ids=${tick}&interval=1h`
+
+    // Make Request
+    axios
+        .get(tickURL)
+        .then(response => {
+            if(response['status'] == 200 && response['statusText'] == 'OK') { // Successful Response
+                // Store data value
+                let data = response['data'];
+
+                // Check data not null
+                if(data) {
+                    // JS Object to hold {ticker: price}
+                    let tickers = {}
+
+                    // Iterate through responses
+                    for(let i = 0; i < data.length; i++) {
+                        // Check response not null
+                        if(data[i]['symbol'] && data[i]['price']) {
+                            // Convert to float
+                            let price = parseFloat(data[i]['price']);
+                            
+                            // Add to tickers object {ticker: price}
+                            tickers[data[i]['symbol']] = price;
+                        }
+                    }
+
+                    // Send response
+                    res.send(tickers);
+                    console.log('Response Success');
+                }
+                
+            } else { // Error in Response
+                console.log('Error: Nomics Failure');
+                res.send('Unavailable');
+            }
+        });
+});
+
+
 
 // Listening on port 5000
 app.listen(PORT, function() {

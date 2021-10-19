@@ -33,7 +33,7 @@
     width: 100%;
     margin-top: 100vh;
     padding-top: 7.5vh;
-    padding-bottom: 7.5vh;
+    padding-bottom: 2vh;
     text-align: start;
 }
 .content h1 {
@@ -45,7 +45,33 @@
     font-size: 2.5rem;
 }
 
-
+/* Ticker Styling */
+.ticker {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    transition: all ease 400ms;
+}
+.ticker h1 {
+    color: #802bb1;
+    font-size: 5rem;
+    margin-bottom: 0;
+}
+.ticker p {
+    color: #fff;
+    font-size: 1.75rem;
+}
+.ticker:hover, .ticker:hover h1, .ticker:hover h2, .ticker:hover p {
+    transform: scale(1.01);
+}
+.tickerPrice {
+    text-align: center;
+}
+.tickerPrice h2 {
+    font-size: 4rem;
+    margin-bottom: 0;
+}
 
 /* Keyframes */
 @keyframes fadeInAnimation {

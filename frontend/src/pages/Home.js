@@ -1,11 +1,12 @@
 // Home Page -- Samuel Adamson
 import '../css/Home.css'
 // React Bootstrap
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
 // Components
 import Fader from './components/Fader';
 import SplashStat from './components/SplashStat';
-
+import Tickers from './components/Tickers';
+import Footer from './components/Footer';
 
 const Home = () => {
     return (
@@ -13,7 +14,7 @@ const Home = () => {
             <SplashStat />
 
             <div className="content">
-                <Container>
+                <Container className="mb-5 pb-5">
                     <Fader>
                         <Row>
                             <h1> Value in freedom </h1>
@@ -38,6 +39,13 @@ const Home = () => {
                         </Row>
                     </Fader>
                 </Container>
+                <br />
+                
+                <Tickers />
+                <br />
+
+                <Footer />
+
             </div>    
         </div>
     );

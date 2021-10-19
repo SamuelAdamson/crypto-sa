@@ -9,6 +9,5 @@ function totalCapDate() { // Yesterday's date
     return time.toISOString();
 }
 
-
 // Exports
 exports.totalCapDate = totalCapDate;

@@ -1,11 +1,11 @@
 // Binance -- Samuel Adamson
 
-const Bnb = () => {
+const Ada = () => {
     return (
-        <div className="Bnb">
+        <div className="Ada">
             
         </div>
     );
 }
 
-export default Bnb;
+export default Ada;

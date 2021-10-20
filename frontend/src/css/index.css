@@ -39,6 +39,35 @@ code {
     visibility: visible;
 }
 
+/* Pages for each coin */
+.coin-page {
+    text-align: start;
+}
+.coin-page h1 {
+    font-size: 6rem;
+    color: #802bb1;
+}
+.coin-page h2 {
+    font-size: 4rem;
+    color: #fff;
+}
+.coin-page h3 {
+    font-size: 3rem;
+    color: #802bb1;
+    margin-bottom: 0;
+    animation: none;
+}
+.coin-page h4 {
+    font-size: 3rem;
+    color: #fff;
+    margin-bottom: 0;
+}
+.coin-page .sep {
+    height: 0;
+    width: 90%;
+    border: 2px solid #fff;
+}
+
 /* Footer */
 .Footer {
     text-align: center;

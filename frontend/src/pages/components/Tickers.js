@@ -11,9 +11,9 @@ class Tickers extends Component {
     constructor() {
         super();
         this.state = {
-            ethPrice: 3000.00,
-            btcPrice: 50000.00,
-            adaPrice: 2.15
+            ethPrice: 3000.00.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+            btcPrice: 50000.00.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+            adaPrice: 2.15.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})
         };
     };
 
@@ -25,9 +25,9 @@ class Tickers extends Component {
                 .get('/tickers')
                 .then(response => {
                     this.setState({
-                        ethPrice: response['data']['ETH'].toFixed(2),
-                        btcPrice: response['data']['BTC'].toFixed(2),
-                        adaPrice: response['data']['ADA'].toFixed(2)
+                        ethPrice: response['data']['eth'].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+                        btcPrice: response['data']['btc'].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+                        adaPrice: response['data']['ada'].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})
                     });
                 });
         }, 1050) // 1s bottle neck

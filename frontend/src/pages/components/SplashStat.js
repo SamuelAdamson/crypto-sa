@@ -12,7 +12,8 @@ class SplashStat extends Component {
     constructor() {
         super();
         this.state = {
-            totalCap: 2.50
+            totalCap: 0,
+            postFix: 'T'
         };
     };
     
@@ -21,7 +22,8 @@ class SplashStat extends Component {
             .get('/totalCap')
             .then(response => {
                 this.setState({
-                    totalCap: response['data']
+                    totalCap: response['data'][0],
+                    postFix: response['data'][1]
                 });
             });
     };
@@ -34,7 +36,7 @@ class SplashStat extends Component {
                         <Col className="my-auto text-start">
                             <h1> Crypto </h1>
                             <h2>
-                                $<CountUp start={1.00} end={this.state.totalCap} duration={3} decimals={2} /> T
+                                $<CountUp start={1.00} end={this.state.totalCap} duration={3} decimals={2} /> {this.state.postFix}
                             </h2>
                             <h3> Total Market Cap </h3>
                         </Col>

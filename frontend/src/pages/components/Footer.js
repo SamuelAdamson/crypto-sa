@@ -49,8 +49,8 @@ const Footer = () => {
                         </a>
                     </Col>
                     <Col>
-                        <a href="https://nomics.com/" target="_blank" rel="noreferrer">
-                            <h3> Nomics </h3>
+                        <a href="https://www.coingecko.com/en" target="_blank" rel="noreferrer">
+                            <h3> CoinGecko </h3>
                         </a>
                     </Col>
                     <Col>

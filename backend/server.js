@@ -10,13 +10,9 @@ const { request } = require('express');
 dotenv.config();
 // Helper Functions
 const helper = require('./helper');
-const e = require('express');
 
 // Store port
 PORT = process.env.PORT;
-// Store P.Nomics Key -- Serves as our 'database' for Crypto
-NOMICS_KEY = process.env.NOMICS_KEY;
-
 
 /* Handle Request for Total Market Cap Data 
     -- Makes request to Nomics
@@ -25,28 +21,33 @@ app.get('/totalCap', (req, res) => {
     // Get start/end date for market cap
     let startDate = helper.totalCapDate();
     // Request URL
-    let totalCapURL = `https://api.nomics.com/v1/market-cap/history?key=${NOMICS_KEY}&start=${startDate}`;
+    let totalCapURL = 'https://api.coingecko.com/api/v3/global';
     
     // Make Request
     axios
         .get(totalCapURL)
         .then(response => {
-            if(response['status'] == 200 && response['statusText'] == 'OK') { // Successful Response
-                // Most recent market Cap
-                let cap = response['data'][response['data'].length - 1]['market_cap'];
+            // Store Response body
+            let body = response['data'];
+
+            // Check not null
+            if(body) {
+                // Store Total Crypto Market cap in usd
+                let totalCap = body['data']['total_market_cap']['usd'];
                 
-                // Check not null
-                if(cap) {
-                    // Convert to number
-                    cap = parseFloat(cap);
-                    // Send Response
-                    res.send(cap.toExponential().substring(0,4));
-                } else { // Error in Response
-                    res.send('2.70');
-                }
-            } else { // Error in Response
-                res.send('2.70');
+                //Send response, log success
+                let totalCapRes = helper.toShort(totalCap);
+                res.send(totalCapRes); // Send array
+                console.log('Total Cap Response Success!');
+            } else { // Log Error
+                console.log('Null Response');
+                res.send(0);
             }
+        })
+        .catch(function (error) { // Error in response
+            // Log Error, Send 0 response
+            console.log(error);
+            res.send(0);
         });
 });
 
@@ -56,47 +57,58 @@ app.get('/totalCap', (req, res) => {
     -- Responds with Ethereum,Bitcoin,Binance Prices to 2 decimals */
 app.get('/tickers', (req, res) => {
     // Set Ticker
-    let tick = 'ETH,BTC,ADA';
+    let tick = 'ethereum%2Cbitcoin%2Ccardano';
     // API Url
-    let tickURL = `https://api.nomics.com/v1/currencies/ticker?key=${NOMICS_KEY}&ids=${tick}&interval=1h`
+    let tickURL = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${tick}`;
 
     // Make Request
     axios
         .get(tickURL)
         .then(response => {
-            if(response['status'] == 200 && response['statusText'] == 'OK') { // Successful Response
-                // Store data value
-                let data = response['data'];
+            // Store Response body
+            let body = response['data'];
 
-                // Check data not null
-                if(data) {
-                    // JS Object to hold {ticker: price}
-                    let tickers = {}
+            // Check not null
+            if(body){
+                // Store tickers
+                let tickers = {};
 
-                    // Iterate through responses
-                    for(let i = 0; i < data.length; i++) {
-                        // Check response not null
-                        if(data[i]['symbol'] && data[i]['price']) {
-                            // Convert to float
-                            let price = parseFloat(data[i]['price']);
-                            
-                            // Add to tickers object {ticker: price}
-                            tickers[data[i]['symbol']] = price;
-                        }
-                    }
-
-                    // Send response
-                    res.send(tickers);
-                    console.log('Response Success');
+                // Iterate through each coin
+                for(let i = 0; i < body.length; i++) {
+                    // Store tickers {symbol: price}
+                    tickers[body[i]['symbol']] = body[i]['current_price'];
                 }
                 
-            } else { // Error in Response
-                console.log('Error: Nomics Failure');
-                res.send('Unavailable');
+                // Log and send response
+                res.send(tickers);
+                console.log('Tickers Response Success!');
+            } else { // Null Response, log and send 0
+                console.log('Null Response!');
+                res.send({
+                    ETH: 0,
+                    BTC: 0,
+                    ADA: 0
+                })
             }
+        })
+        .catch(function (error) { // Error in response
+            // Log Error, Send 0 response
+            console.log(error);
+            res.send({
+                ETH: 0,
+                BTC: 0,
+                ADA: 0
+            });
         });
 });
 
+
+/* Handle Request for Ethereum Detailed Data
+    -- Makes request to Nomics
+    -- Responds with Ethereum Details */
+app.get('/ethereum', (req,res) => {
+
+});
 
 
 // Listening on port 5000

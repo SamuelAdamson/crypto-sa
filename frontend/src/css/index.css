@@ -39,6 +39,7 @@ code {
     visibility: visible;
 }
 
+
 /* Pages for each coin */
 .coin-page {
     text-align: start;
@@ -66,6 +67,30 @@ code {
     height: 0;
     width: 90%;
     border: 2px solid #fff;
+}
+.coin-page .stat-row {
+    margin-bottom: 4rem;
+    margin-top: 1rem;
+
+    /* Fade In */
+    opacity: 0;
+    transform: translateY(10vh);
+    visibility: hidden;
+    transition: opacity 1.3s ease, transform 1.3s ease;
+}
+.coin-page .stat-row.is-visible {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+}
+.coin-page .stats-head {
+    display: flex;
+    flex-direction: row;
+    justify-content:flex-start;
+}
+.coin-page .stats-head h4 {
+    align-self: center;
+    margin-left: 1rem;
 }
 
 /* Footer */

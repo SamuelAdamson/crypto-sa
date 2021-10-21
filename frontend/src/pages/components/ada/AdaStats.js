@@ -1,12 +1,11 @@
-// ETH Page -- Stats Display
+// ADA Page -- Stats Display
 // Author: Samuel Adamson
 import axios from 'axios';
 import { Component } from 'react';
 // Import React Elements
 import { Row, Col, Container } from 'react-bootstrap';
 
-
-class EthStats extends Component {
+class AdaStats extends Component {
     constructor() {
         super();
         this.state = {
@@ -20,7 +19,7 @@ class EthStats extends Component {
     loadData() {
         // Make request
         axios
-            .get('/ethereum')
+            .get('/cardano')
             .then(response => {
                 // Store response
                 let body = response['data'];
@@ -81,13 +80,13 @@ class EthStats extends Component {
 
     render() {
         return (
-            <div className="EthStats">
+            <div className="AdaStats">
                 <Container className="mt-4">
                     <Row>
                         <Col sm={8}>
                             <div className="stats-head"> 
-                                <h1> Ethereum </h1>
-                                <h4> (ETH) </h4>
+                                <h1> Cardano </h1>
+                                <h4> (ADA) </h4>
                             </div>
                         </Col>
                         <Col sm={4} className="my-auto">
@@ -155,4 +154,4 @@ class EthStats extends Component {
     }
 }
 
-export default EthStats;
+export default AdaStats;

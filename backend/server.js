@@ -15,7 +15,7 @@ const helper = require('./helper');
 PORT = process.env.PORT;
 
 /* Handle Request for Total Market Cap Data 
-    -- Makes request to Nomics
+    -- Makes request to CoinGecko
     -- Responds with Total Market Cap */
 app.get('/totalCap', (req, res) => {
     // Get start/end date for market cap
@@ -53,13 +53,13 @@ app.get('/totalCap', (req, res) => {
 
 
 /* Handle Request for Ethereum,Bitcoin,Binance Current Price
-    -- Makes request to Nomics
+    -- Makes request to CoinGecko
     -- Responds with Ethereum,Bitcoin,Binance Prices to 2 decimals */
 app.get('/tickers', (req, res) => {
     // Set Ticker
     let tick = 'ethereum%2Cbitcoin%2Ccardano';
     // API Url
-    let tickURL = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${tick}`;
+    let tickURL = `https://api.coingecko.com/api/v3/simple/price?ids=${tick}&vs_currencies=usd`;
 
     // Make Request
     axios
@@ -73,21 +73,19 @@ app.get('/tickers', (req, res) => {
                 // Store tickers
                 let tickers = {};
 
-                // Iterate through each coin
-                for(let i = 0; i < body.length; i++) {
-                    // Store tickers {symbol: price}
-                    tickers[body[i]['symbol']] = body[i]['current_price'];
-                }
-                
-                // Log and send response
+                // Store tickers
+                tickers['eth'] = body['ethereum']['usd'];
+                tickers['btc'] = body['bitcoin']['usd'];
+                tickers['ada'] = body['cardano']['usd'];
+
                 res.send(tickers);
                 console.log('Tickers Response Success!');
             } else { // Null Response, log and send 0
                 console.log('Null Response!');
                 res.send({
-                    ETH: 0,
-                    BTC: 0,
-                    ADA: 0
+                    eth: 0,
+                    btc: 0,
+                    ada: 0
                 })
             }
         })
@@ -95,19 +93,191 @@ app.get('/tickers', (req, res) => {
             // Log Error, Send 0 response
             console.log(error);
             res.send({
-                ETH: 0,
-                BTC: 0,
-                ADA: 0
+                eth: 0,
+                btc: 0,
+                ada: 0
             });
         });
 });
 
 
 /* Handle Request for Ethereum Detailed Data
-    -- Makes request to Nomics
+    -- Makes request to CoinGecko
     -- Responds with Ethereum Details */
 app.get('/ethereum', (req,res) => {
+    // ID
+    let ID = 'ethereum';
+    // API Url
+    let ethURL = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ID}`;
 
+    // Make API Request
+    axios
+        .get(ethURL)
+        .then(response => {
+            // Store body of response
+            body = response['data'][0];
+
+            // Check not null
+            if(body) {
+                // Create response object
+                let marketData = {}
+                
+                // Store normal values
+                marketData['price'] = helper.trim(body['current_price']);
+                marketData['high'] = helper.trim(body['high_24h']);
+                marketData['low'] = helper.trim(body['low_24h']);
+                marketData['ath'] = helper.trim(body['ath']);
+                marketData['atl'] = helper.trim(body['atl']);
+
+                // Store special values
+                marketData['marketCap'] = helper.toShort(body['market_cap']);
+                marketData['volume'] = helper.toShort(body['total_volume']);
+                marketData['supply'] = helper.toShort(body['circulating_supply']);
+                marketData['maxSupply'] = helper.toShort(body['max_supply']);
+                marketData['change24'] = helper.changeMod(body['price_change_percentage_24h']);
+
+                // Send response, and log success
+                res.send(marketData);
+                console.log('Ethereum Response Success!');
+            } else {
+                // Log Error, send 0 response
+                console.log('Null Response!');
+                res.send({
+                    price: 0, marketCap: 0, volume: 0, change24: 0,
+                    high: 0, low: 0, supply: 0,
+                    ath: 0, atl: 0, maxSupply: 0
+                });    
+            }
+        })
+        .catch(function (error) {
+            // Log Error, send 0 response
+            console.log(error);
+            res.send({
+                price: 0, marketCap: 0, volume: 0, change24: 0,
+                high: 0, low: 0, supply: 0,
+                ath: 0, atl: 0, maxSupply: 0
+            });
+        });
+});
+
+
+/* Handle Request for Bitcoin Detailed Data
+    -- Makes request to CoinGecko
+    -- Responds with Bitcoin Details */
+app.get('/bitcoin', (req,res) => {
+    // ID
+    let ID = 'bitcoin';
+    // API Url
+    let ethURL = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ID}`;
+
+    // Make API Request
+    axios
+        .get(ethURL)
+        .then(response => {
+            // Store body of response
+            body = response['data'][0];
+
+            // Check not null
+            if(body) {
+                // Create response object
+                let marketData = {}
+                
+                // Store normal values
+                marketData['price'] = helper.trim(body['current_price']);
+                marketData['high'] = helper.trim(body['high_24h']);
+                marketData['low'] = helper.trim(body['low_24h']);
+                marketData['ath'] = helper.trim(body['ath']);
+                marketData['atl'] = helper.trim(body['atl']);
+
+                // Store special values
+                marketData['marketCap'] = helper.toShort(body['market_cap']);
+                marketData['volume'] = helper.toShort(body['total_volume']);
+                marketData['supply'] = helper.toShort(body['circulating_supply']);
+                marketData['maxSupply'] = helper.toShort(body['max_supply']);
+                marketData['change24'] = helper.changeMod(body['price_change_percentage_24h']);
+
+                // Send response, and log success
+                res.send(marketData);
+                console.log('Bitcoin Response Success!');
+            } else {
+                // Log Error, send 0 response
+                console.log('Null Response!');
+                res.send({
+                    price: 0, marketCap: 0, volume: 0, change24: 0,
+                    high: 0, low: 0, supply: 0,
+                    ath: 0, atl: 0, maxSupply: 0
+                });    
+            }
+        })
+        .catch(function (error) {
+            // Log Error, send 0 response
+            console.log(error);
+            res.send({
+                price: 0, marketCap: 0, volume: 0, change24: 0,
+                high: 0, low: 0, supply: 0,
+                ath: 0, atl: 0, maxSupply: 0
+            });
+        });
+});
+
+
+/* Handle Request for Cardano Detailed Data
+    -- Makes request to CoinGecko
+    -- Responds with Cardano Details */
+app.get('/cardano', (req,res) => {
+    // ID
+    let ID = 'cardano';
+    // API Url
+    let ethURL = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ID}`;
+
+    // Make API Request
+    axios
+        .get(ethURL)
+        .then(response => {
+            // Store body of response
+            body = response['data'][0];
+
+            // Check not null
+            if(body) {
+                // Create response object
+                let marketData = {}
+                
+                // Store normal values
+                marketData['price'] = helper.trim(body['current_price']);
+                marketData['high'] = helper.trim(body['high_24h']);
+                marketData['low'] = helper.trim(body['low_24h']);
+                marketData['ath'] = helper.trim(body['ath']);
+                marketData['atl'] = helper.trim(body['atl']);
+
+                // Store special values
+                marketData['marketCap'] = helper.toShort(body['market_cap']);
+                marketData['volume'] = helper.toShort(body['total_volume']);
+                marketData['supply'] = helper.toShort(body['circulating_supply']);
+                marketData['maxSupply'] = helper.toShort(body['max_supply']);
+                marketData['change24'] = helper.changeMod(body['price_change_percentage_24h']);
+
+                // Send response, and log success
+                res.send(marketData);
+                console.log('Cardano Response Success!');
+            } else {
+                // Log Error, send 0 response
+                console.log('Null Response!');
+                res.send({
+                    price: 0, marketCap: 0, volume: 0, change24: 0,
+                    high: 0, low: 0, supply: 0,
+                    ath: 0, atl: 0, maxSupply: 0
+                });    
+            }
+        })
+        .catch(function (error) {
+            // Log Error, send 0 response
+            console.log(error);
+            res.send({
+                price: 0, marketCap: 0, volume: 0, change24: 0,
+                high: 0, low: 0, supply: 0,
+                ath: 0, atl: 0, maxSupply: 0
+            });
+        });
 });
 
 

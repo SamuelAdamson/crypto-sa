@@ -11,6 +11,11 @@ function totalCapDate() {
 
 // Converts floats to short form, 300,000,000 => 300 M; 2,165,100 => 2.165 M 
 function toShort(inFloat) {
+    // Check null
+    if(!inFloat || inFloat == 'null') {
+        return null;
+    }
+
     // Remove decimals and convert to string
     let floatStr = Math.round(inFloat).toString();
     // Store length
@@ -22,20 +27,24 @@ function toShort(inFloat) {
         // Add decimal
         floatStr = floatStr.slice(0, -2) + '.' + floatStr.slice(-2,);
 
-        if(floatStr.length == 6) { // Take Substring
+        if(floatStr.length >= 6) { // Take Substring
             floatStr = floatStr.substring(0,3);
-        } 
+        } else {
+            floatStr = floatStr.substring(0,4);
+        }
 
         return [floatStr, 'T']; // Return String and postfix 
 
     } else if(floatLen > 9) { // Billion
         // Drop last 6 characters
-        floatStr = floatStr.slice(0, -5);
+        floatStr = floatStr.slice(0, -7);
         // Add decimal
         floatStr = floatStr.slice(0, -2) + '.' + floatStr.slice(-2,);
 
-        if(floatStr.length == 6) { // Take Substring
+        if(floatStr.length >= 6) { // Take Substring
             floatStr = floatStr.substring(0,3);
+        } else {
+            floatStr = floatStr.substring(0,4);
         } 
 
         return [floatStr, 'B']; // Return String and postfix
@@ -46,8 +55,10 @@ function toShort(inFloat) {
         // Add decimal
         floatStr = floatStr.slice(0, -2) + '.' + floatStr.slice(-2,);
 
-        if(floatStr.length == 6) { // Take Substring
+        if(floatStr.length >= 6) { // Take Substring
             floatStr = floatStr.substring(0,3);
+        } else {
+            floatStr = floatStr.substring(0,4);
         } 
 
         return [floatStr, 'M']; // Return String and postfix
@@ -58,6 +69,26 @@ function toShort(inFloat) {
     }
 }
 
+// Modify change value to include +/-
+function changeMod(inFloat) {
+    // Edit Decimal places
+    inFloat = inFloat.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+    // Check positive, add +
+    if(inFloat > 0) {
+        return ['+', inFloat];
+    } else {
+        return ['', inFloat];
+    }
+}
+
+// Modify values to 2 decimal places and add ','
+function trim(inFloat) { // In: 123456.789; Out: 123,456.79
+    return(inFloat.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+}
+
 // Exports
 exports.totalCapDate = totalCapDate;
 exports.toShort = toShort;
+exports.changeMod = changeMod;
+exports.trim = trim;

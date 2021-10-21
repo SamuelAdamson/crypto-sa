@@ -29,8 +29,12 @@ class Tickers extends Component {
                         btcPrice: response['data']['btc'].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}),
                         adaPrice: response['data']['ada'].toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})
                     });
+                })
+                .catch( function(error) {
+                    // Catch Error -- no need to update prices
+                    console.log(error);
                 });
-        }, 1050) // 1s bottle neck
+        }, 250) 
     }
 
     render() {

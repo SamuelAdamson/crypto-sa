@@ -9,6 +9,52 @@ function totalCapDate() {
     return time.toISOString();
 }
 
+// -- Chart date functions --
+function now() { // Returns now timestamp Unix Epoch
+    // Now -- ms
+    let now = Date.now();
+    now = Math.round(now / 1000);
+
+    return(now)
+}
+
+function oneDay() { // Returns yesterday
+    let yesterday = new Date;
+    yesterday = yesterday.setDate(yesterday.getDate() - 1);
+    yesterday = Math.round(yesterday / 1000);
+
+    // Return dates
+    return(yesterday);
+}
+
+function sevenDay() { // Returns 7 days ago
+    let sevenAgo = new Date;
+    sevenAgo = sevenAgo.setDate(sevenAgo.getDate() - 30);
+    sevenAgo = Math.round(sevenAgo / 1000);
+
+    // Return dates
+    return(sevenAgo);
+}
+
+function thirtyDay() { // Returns 30 days ago
+    let thirtyAgo = new Date;
+    thirtyAgo = thirtyAgo.setDate(thirtyAgo.getDate() - 7);
+    thirtyAgo = Math.round(thirtyAgo / 1000);
+
+    // Return dates
+    return(thirtyAgo);
+}
+
+function year() { // Returns year ago
+    let yearAgo = new Date;
+    yearAgo = yearAgo.setFullYear(yearAgo.getFullYear() - 1);
+    yearAgo = Math.round(yearAgo / 1000);
+
+    // Return dates
+    return(yearAgo);
+}
+
+// -- Formatting Functions --
 // Converts floats to short form, 300,000,000 => 300 M; 2,165,100 => 2.165 M 
 function toShort(inFloat) {
     // Check null
@@ -92,3 +138,9 @@ exports.totalCapDate = totalCapDate;
 exports.toShort = toShort;
 exports.changeMod = changeMod;
 exports.trim = trim;
+// Charting Exports
+exports.now = now;
+exports.oneDay = oneDay;
+exports.sevenDay = sevenDay;
+exports.thirtyDay = thirtyDay;
+exports.year = year;

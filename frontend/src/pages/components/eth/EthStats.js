@@ -81,7 +81,7 @@ class EthStats extends Component {
 
     render() {
         return (
-            <div className="EthStats">
+            <div className="EthStats stats">
                 <Container className="mt-4">
                     <Row>
                         <Col sm={8}>

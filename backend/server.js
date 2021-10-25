@@ -287,16 +287,17 @@ app.get('/cardano', (req,res) => {
 /*                      ------------------------------                            */
 
 // Get Spark Data from CoinGecko -- Takes 4 separate responses
-const getSparkData = (dayURL, weekURL, monthURL, yearURL) => {
+const getSparkData = (dayURL, weekURL, monthURL, yearURL, priceURL, coinID) => {
     // Store promises
     let dayReq = axios.get(dayURL);
     let weekReq = axios.get(weekURL);
     let monthReq = axios.get(monthURL);
     let yearReq = axios.get(yearURL);
+    let priceReq = axios.get(priceURL);
 
     // Get data w/ axios
     return axios
-        .all([dayReq, weekReq, monthReq, yearReq])
+        .all([dayReq, weekReq, monthReq, yearReq, priceReq])
         .then(response => {
             // Create response object
             let resObj = {};
@@ -306,10 +307,10 @@ const getSparkData = (dayURL, weekURL, monthURL, yearURL) => {
             let weekRes = response[1]['data'];  // Week Data
             let monthRes = response[2]['data']; // Month Data
             let yearRes = response[3]['data'];  // Year Data
+            let priceRes = response[4]['data']; // Current price
 
             // Check not null -- Day Response
             if(dayRes) {
-                // Store prices
                 resObj['day'] = dayRes['prices'];
             } else { // Store null
                 resObj['day'] = null;
@@ -317,7 +318,6 @@ const getSparkData = (dayURL, weekURL, monthURL, yearURL) => {
 
             // Check not null -- Week Response
             if(weekRes) {
-                // Store prices
                 resObj['week'] = weekRes['prices'];
             } else { // Store null
                 resObj['week'] = null;
@@ -325,7 +325,6 @@ const getSparkData = (dayURL, weekURL, monthURL, yearURL) => {
 
             // Check not null -- Month Response
             if(monthRes) {
-                // Store prices
                 resObj['month'] = monthRes['prices'];
             } else { // Store null
                 resObj['month'] = null;
@@ -333,10 +332,16 @@ const getSparkData = (dayURL, weekURL, monthURL, yearURL) => {
 
             // Check not null -- Day Response
             if(yearRes) {
-                // Store prices
                 resObj['year'] = yearRes['prices'];
             } else { // Store null
                 resObj['year'] = null;
+            }
+    
+            // Check not null -- Price Response
+            if(priceRes) {
+                resObj['price'] = helper.trim(priceRes[coinID]['usd']);
+            } else {
+                resObj['price'] = 0;
             }
 
             // Return response object
@@ -367,8 +372,9 @@ app.get('/ethSpark', (req, res) => {
     let weekURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${sevenDay}&to=${now}`;
     let monthURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${thirtyDay}&to=${now}`;
     let yearURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${year}&to=${now}`;
+    let priceURL = `https://api.coingecko.com/api/v3/simple/price?ids=${ID}&vs_currencies=usd`;
 
-    getSparkData(dayURL, weekURL, monthURL, yearURL)
+    getSparkData(dayURL, weekURL, monthURL, yearURL, priceURL, ID)
         .then(ethData => {
             // Send Response
             res.send(ethData);
@@ -395,8 +401,9 @@ app.get('/btcSpark', (req, res) => {
     let weekURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${sevenDay}&to=${now}`;
     let monthURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${thirtyDay}&to=${now}`;
     let yearURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${year}&to=${now}`;
+    let priceURL = `https://api.coingecko.com/api/v3/simple/price?ids=${ID}&vs_currencies=usd`;
 
-    getSparkData(dayURL, weekURL, monthURL, yearURL)
+    getSparkData(dayURL, weekURL, monthURL, yearURL, priceURL, ID)
         .then(btcData => {
             // Send Response
             res.send(btcData);
@@ -423,8 +430,9 @@ app.get('/adaSpark', (req, res) => {
     let weekURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${sevenDay}&to=${now}`;
     let monthURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${thirtyDay}&to=${now}`;
     let yearURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${year}&to=${now}`;
+    let priceURL = `https://api.coingecko.com/api/v3/simple/price?ids=${ID}&vs_currencies=usd`;
 
-    getSparkData(dayURL, weekURL, monthURL, yearURL)
+    getSparkData(dayURL, weekURL, monthURL, yearURL, priceURL, ID)
         .then(adaData => {
             // Send Response
             res.send(adaData);

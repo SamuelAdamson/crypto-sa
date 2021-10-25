@@ -80,7 +80,7 @@ class BtcStats extends Component {
 
     render() {
         return (
-            <div className="BtcStats">
+            <div className="BtcStats stats">
                 <Container className="mt-4">
                     <Row>
                         <Col sm={8}>

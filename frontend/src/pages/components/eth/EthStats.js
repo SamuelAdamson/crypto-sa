@@ -67,7 +67,7 @@ class EthStats extends Component {
         // For each element
         for(let i = 0; i < faders.length; i++) {
             // Fade in every 700 ms
-            await timer(700);
+            await timer(500);
             faders[i].classList.add('is-visible');
         };
     };

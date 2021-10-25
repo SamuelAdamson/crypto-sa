@@ -80,7 +80,7 @@ class AdaStats extends Component {
 
     render() {
         return (
-            <div className="AdaStats">
+            <div className="AdaStats stats">
                 <Container className="mt-4">
                     <Row>
                         <Col sm={8}>

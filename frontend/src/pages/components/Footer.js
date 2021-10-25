@@ -67,8 +67,8 @@ const Footer = () => {
                         </a>
                     </Col>
                     <Col>
-                        <a href="https://www.chartjs.org/" target="_blank" rel="noreferrer">
-                            <h3> ChartJS </h3>
+                        <a href="https://apexcharts.com/" target="_blank" rel="noreferrer">
+                            <h3> ApexCharts </h3>
                         </a>
                     </Col>
                     <Col>

@@ -8,9 +8,6 @@ import Chart from 'react-apexcharts';
 class EthSpark extends Component {
     constructor() {
         super();
-        // Axios Promise
-        this.axPromise = null;
-
         // State Values -- Chart Data/Configuration
         this.state = {
             price: 0,
@@ -18,6 +15,7 @@ class EthSpark extends Component {
             options: {
                 colors: ['#802bb1'],
                 chart: {
+                    sparkline: 'enabled',
                     type: 'area',
                     stacked: false,
                     toolbar: {
@@ -28,9 +26,18 @@ class EthSpark extends Component {
                     show: true,
                     curve: 'smooth'
                 },
+                fill: {
+                    gradient: {
+                        enabled: true,
+                        opacityFrom: 0.55,
+                        opacityTo: 0
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
                 xaxis: {
                     type: 'datetime',
-                    show: false,
                     labels: {
                         show: false,
                         formatter: function(timestamp) {
@@ -38,10 +45,11 @@ class EthSpark extends Component {
                         }
                     },
                     axisTicks: {
-                        show: true,
-                        color: '#ffffff'
+                        show: false,
+                    },
+                    tooltip: {
+                        enabled: false
                     }
-                    
                 },
                 yaxis: {
                     show: false,
@@ -81,46 +89,119 @@ class EthSpark extends Component {
                 }
             },
             series: [] // Chart Series (data)
-        };
-    };  
+        }
 
-    // Get Data from backend
-    storeData() {
-        // Make request
-        const promise = axios.get('/ethSpark');
-        // Store promise result
-        this.axPromise = promise.then((response) => response.data);
-    }
+        // Bindings
+        this.loadDay = this.loadDay.bind(this);
+        this.loadWeek = this.loadWeek.bind(this);
+        this.loadMonth = this.loadMonth.bind(this);
+        this.loadYear = this.loadYear.bind(this);
+    };  
 
     // Load Chart Timeseries with 1 Day Data
     loadDay() {
-        // Access promise data
-        this.axPromise.then(body => {
-            // Check not null
-            if(body) {
-                // Store daydata in chart series
-                this.setState({
-                    price: body['price'],
-                    series: [{
-                        name: 'ETH-USD',
-                        data: body['day']
-                    }]
-                });
-            } else { // Null Response
-                console.log('Null Response!');
-            }
+        // Make API Request
+        axios
+            .get('/ethDay')
+            .then(response => {
+                // Store body
+                let body = response['data'];
 
-        })
-        .catch(function(error) {
-            console.log(error);
-        });
+                // Check not null
+                if(body) {
+                    // Update state
+                    this.setState({
+                        price: body['price'],
+                        series: [{
+                            name: 'ETH-USD',
+                            data: body['day']
+                        }]
+                    })
+                }
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+    }
+
+    // Load Chart Timeseries with 1 Week Data
+    loadWeek() {
+        // Make API Request
+        axios
+            .get('/ethWeek')
+            .then(response => {
+                // Store body
+                let body = response['data'];
+
+                // Check not null
+                if(body) {
+                    // Update state
+                    this.setState({
+                        series: [{
+                            name: 'ETH-USD',
+                            data: body
+                        }]
+                    })
+                }
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+    }
+
+    // Load Chart Timeseries with 1 Month Data
+    loadMonth() {
+        // Make API Request
+        axios
+            .get('/ethMonth')
+            .then(response => {
+                // Store body
+                let body = response['data'];
+
+                // Check not null
+                if(body) {
+                    // Update state
+                    this.setState({
+                        series: [{
+                            name: 'ETH-USD',
+                            data: body
+                        }]
+                    })
+                }
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+    }
+
+    // Load Chart Timeseries with 1 Week Data
+    loadYear() {
+        // Make API Request
+        axios
+            .get('/ethYear')
+            .then(response => {
+                // Store body
+                let body = response['data'];
+
+                // Check not null
+                if(body) {
+                    // Update state
+                    this.setState({
+                        series: [{
+                            name: 'ETH-USD',
+                            data: body
+                        }]
+                    })
+                }
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
     }
 
     // On Component Mount
     componentDidMount = () => {
-        this.storeData(); // Store Data for Sparklines
         this.loadDay();   // Load one day data by default
-        console.log(this.state.series);
     };
 
     render() {
@@ -130,10 +211,22 @@ class EthSpark extends Component {
                     <Row>
                         <Col>
                             <ToggleButtonGroup type="radio" name="options" defaultValue={0}>
-                                <ToggleButton id="tbg-radio-0" size="lg" value={0}> <strong> 1D </strong> </ToggleButton>
-                                <ToggleButton id="tbg-radio-1" size="lg" value={1}> <strong> 1W </strong> </ToggleButton>
-                                <ToggleButton id="tbg-radio-2" size="lg" value={2}> <strong> 1M </strong> </ToggleButton>
-                                <ToggleButton id="tbg-radio-3" size="lg" value={3}> <strong> 1Y </strong> </ToggleButton>
+                                <ToggleButton id="tbg-radio-0" size="lg" value={0}
+                                 name="coinToggleGroup" onClick={this.loadDay}> 
+                                    <strong> 1D </strong> 
+                                </ToggleButton>
+                                <ToggleButton id="tbg-radio-1" size="lg" value={1}
+                                 name="coinToggleGroup" onClick={this.loadWeek}> 
+                                    <strong> 1W </strong> 
+                                </ToggleButton>
+                                <ToggleButton id="tbg-radio-2" size="lg" value={2}
+                                 name="coinToggleGroup" onClick={this.loadMonth}> 
+                                    <strong> 1M </strong> 
+                                </ToggleButton>
+                                <ToggleButton id="tbg-radio-3" size="lg" value={3}
+                                 name="coinToggleGroup" onClick={this.loadYear}> 
+                                    <strong> 1Y </strong> 
+                                </ToggleButton>
                             </ToggleButtonGroup>
                         </Col>
                         <Col>
@@ -145,7 +238,7 @@ class EthSpark extends Component {
                     <Chart 
                         options={this.state.options}
                         series={this.state.series}
-                        type="line"
+                        type="area"
                         width="100%" 
                     />
                 </Container>

@@ -1,15 +1,15 @@
-// ETH Page -- Sparkline
+// BTC Page -- Sparkline
 // Author: Samuel Adamson
 import axios from 'axios';
 import { Component } from 'react';
 import { Container, Row, Col, ToggleButtonGroup, ToggleButton } from 'react-bootstrap';
 import Chart from 'react-apexcharts';
 
-class EthSpark extends Component {
+class BtcSpark extends Component {
     constructor() {
         super();
         // Store Promise to URl
-        this.axPromise = axios.get('/ethSpark');
+        this.axPromise = axios.get('/btcSpark');
 
         // State Values -- Chart Data/Configuration
         this.state = {
@@ -114,7 +114,7 @@ class EthSpark extends Component {
                 this.setState({
                     price: body['price'],
                     series: [{
-                        name: 'ETH-USD',
+                        name: 'BTC-USD',
                         data: body['day']
                     }]
                 });
@@ -136,7 +136,7 @@ class EthSpark extends Component {
                 // Update State
                 this.setState({
                     series: [{
-                        name: 'ETH-USD',
+                        name: 'BTC-USD',
                         data: body['week']
                     }]
                 });
@@ -158,7 +158,7 @@ class EthSpark extends Component {
                 // Update State
                 this.setState({
                     series: [{
-                        name: 'ETH-USD',
+                        name: 'BTC-USD',
                         data: body['month']
                     }]
                 });
@@ -180,7 +180,7 @@ class EthSpark extends Component {
                 // Update State
                 this.setState({
                     series: [{
-                        name: 'ETH-USD',
+                        name: 'BTC-USD',
                         data: body['year']
                     }]
                 });
@@ -199,7 +199,7 @@ class EthSpark extends Component {
 
     render() {
         return(
-            <div className="EthSpark spark">
+            <div className="BtcSpark spark">
                 <Container className="pt-5 pb-5">
                     <Row>
                         <Col>
@@ -224,7 +224,7 @@ class EthSpark extends Component {
                         </Col>
                         <Col>
                             <h6> ${this.state.price} </h6>
-                            <h5> ETH </h5>
+                            <h5> BTC </h5>
                         </Col>
                     </Row>
 
@@ -240,4 +240,4 @@ class EthSpark extends Component {
     }
 }
 
-export default EthSpark;
+export default BtcSpark;

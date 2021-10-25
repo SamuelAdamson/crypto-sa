@@ -286,154 +286,159 @@ app.get('/cardano', (req,res) => {
 // ===================== Sparkline Charting Endpoints ============================
 /*                      ------------------------------                            */
 
+// Get Spark Data from CoinGecko -- Takes 4 separate responses
+const getSparkData = (dayURL, weekURL, monthURL, yearURL, priceURL, coinID) => {
+    // Store promises
+    let dayReq = axios.get(dayURL);
+    let weekReq = axios.get(weekURL);
+    let monthReq = axios.get(monthURL);
+    let yearReq = axios.get(yearURL);
+    let priceReq = axios.get(priceURL);
 
-// ----------- ETHEREUM REQUESTS --------------
-app.get('/ethDay', (req, res) => { // One Day
+    // Get data w/ axios
+    return axios
+        .all([dayReq, weekReq, monthReq, yearReq, priceReq])
+        .then(response => {
+            // Create response object
+            let resObj = {};
+
+            // Get response body
+            let dayRes = response[0]['data'];   // Day Data
+            let weekRes = response[1]['data'];  // Week Data
+            let monthRes = response[2]['data']; // Month Data
+            let yearRes = response[3]['data'];  // Year Data
+            let priceRes = response[4]['data']; // Current price
+
+            // Check not null -- Day Response
+            if(dayRes) {
+                resObj['day'] = dayRes['prices'];
+            } else { // Store null
+                resObj['day'] = null;
+            }
+
+            // Check not null -- Week Response
+            if(weekRes) {
+                resObj['week'] = weekRes['prices'];
+            } else { // Store null
+                resObj['week'] = null;
+            }
+
+            // Check not null -- Month Response
+            if(monthRes) {
+                resObj['month'] = monthRes['prices'];
+            } else { // Store null
+                resObj['month'] = null;
+            }
+
+            // Check not null -- Day Response
+            if(yearRes) {
+                resObj['year'] = yearRes['prices'];
+            } else { // Store null
+                resObj['year'] = null;
+            }
+    
+            // Check not null -- Price Response
+            if(priceRes) {
+                resObj['price'] = helper.trim(priceRes[coinID]['usd']);
+            } else {
+                resObj['price'] = 0;
+            }
+
+            // Return response object
+            return resObj;
+        })
+        .catch(function(error) {
+            console.log(error);
+            return null;
+        });
+}
+
+/* Handling Request ethereum sparkline
+    -- Makes coingecko API request
+    -- Returns prices for 1d, 7d, 30d, 1y */
+app.get('/ethSpark', (req, res) => {
     // ID
     let ID = 'ethereum';
     
     // Store timeframes
     let now = helper.now(); // Current timestamp
     let oneDay = helper.oneDay();
-
-    // Store URL
-    let dayURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${oneDay}&to=${now}`;
-    let priceURL = `https://api.coingecko.com/api/v3/simple/price?ids=${ID}&vs_currencies=usd`;
-
-    // Store requests
-    let dayReq = axios.get(dayURL);
-    let priceReq = axios.get(priceURL);
-
-    axios
-        .all([dayReq, priceReq])
-        .then(response => {
-            // Store results
-            let dayRes = response[0]['data'];
-            let priceRes = response[1]['data'];
-
-            // Check not null
-            if(dayRes && priceRes) {
-                // Store result
-                let resObj = {
-                    day: dayRes['prices'],
-                    price: helper.trim(priceRes[ID]['usd'])
-                }
-                // Send Result
-                res.send(resObj);
-                console.log(`${ID}  day response sent!`);
-            } else {
-                console.log('Null Response!');
-                res.send(null);
-            }
-
-        })
-        .catch(function(error) {
-            console.log(error);
-            res.send(null);
-        });
-});
-
-app.get('/ethWeek', (req, res) => { // One Week
-    // ID
-    let ID = 'ethereum';
-    
-    // Store timeframes
-    let now = helper.now(); // Current timestamp
-    let sevenDay = helper.sevenDay(); // One week ago
-
-    // Store URL
-    let URL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${sevenDay}&to=${now}`;
-    
-    // Axios Request
-    axios.get(URL)
-        .then(response => {
-            // Store body
-            let body = response['data'];
-
-            // Check not null
-            if(body) {
-                // Send prices
-                console.log(`${ID} week response sent!`)
-                res.send(body['prices']);
-            } else {
-                console.log('Null Response!');
-                res.send(null);
-            }
-        })
-        .catch(function(error) {
-            console.log(error);
-            res.send(null);
-        });
-});
-
-app.get('/ethMonth', (req, res) => { // One Month
-    // ID
-    let ID = 'ethereum';
-    
-    // Store timeframes
-    let now = helper.now(); // Current timestamp
-    let thirtyDay = helper.thirtyDay(); // Thirty Days ago
-
-    // Store URL
-    let URL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${thirtyDay}&to=${now}`;
-    
-    // Axios Request
-    axios.get(URL)
-        .then(response => {
-            // Store body
-            let body = response['data'];
-
-            // Check not null
-            if(body) {
-                // Send prices
-                console.log(`${ID} month response sent!`)
-                res.send(body['prices']);
-            } else {
-                console.log('Null Response!');
-                res.send(null);
-            }
-        })
-        .catch(function(error) {
-            console.log(error);
-            res.send(null);
-        });
-});
-
-app.get('/ethYear', (req, res) => { // One Year
-    // ID
-    let ID = 'ethereum';
-    
-    // Store timeframes
-    let now = helper.now(); // Current timestamp
+    let sevenDay = helper.sevenDay();
+    let thirtyDay = helper.thirtyDay();
     let year = helper.year();
 
     // Store URL's
-    let URL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${year}&to=${now}`;
+    let dayURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${oneDay}&to=${now}`;
+    let weekURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${sevenDay}&to=${now}`;
+    let monthURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${thirtyDay}&to=${now}`;
+    let yearURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${year}&to=${now}`;
+    let priceURL = `https://api.coingecko.com/api/v3/simple/price?ids=${ID}&vs_currencies=usd`;
 
-    // Axios Request
-    axios.get(URL)
-        .then(response => {
-            // Store body
-            let body = response['data'];
-
-            // Check not null
-            if(body) {
-                // Send prices
-                console.log(`${ID} year response sent!`)
-                res.send(body['prices']);
-            } else {
-                console.log('Null Response!');
-                res.send(null);
-            }
-        })
-        .catch(function(error) {
-            console.log(error);
-            res.send(null);
+    getSparkData(dayURL, weekURL, monthURL, yearURL, priceURL, ID)
+        .then(ethData => {
+            // Send Response
+            res.send(ethData);
+            console.log('Ethereum Spark Sent');
         });
 });
 
+/* Handling Request bitcoin sparkline
+    -- Makes coingecko API request
+    -- Returns prices for 1d, 7d, 30d, 1y */
+app.get('/btcSpark', (req, res) => {
+    // ID
+    let ID = 'bitcoin';
+    
+    // Store timeframes
+    let now = helper.now(); // Current timestamp
+    let oneDay = helper.oneDay();
+    let sevenDay = helper.sevenDay();
+    let thirtyDay = helper.thirtyDay();
+    let year = helper.year();
 
-// Bitcoin and Cardano Requests ?
+    // Store URL's
+    let dayURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${oneDay}&to=${now}`;
+    let weekURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${sevenDay}&to=${now}`;
+    let monthURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${thirtyDay}&to=${now}`;
+    let yearURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${year}&to=${now}`;
+    let priceURL = `https://api.coingecko.com/api/v3/simple/price?ids=${ID}&vs_currencies=usd`;
+
+    getSparkData(dayURL, weekURL, monthURL, yearURL, priceURL, ID)
+        .then(btcData => {
+            // Send Response
+            res.send(btcData);
+            console.log('Bitcoin Spark Sent');
+        });
+});
+    
+/* Handling Request cardano sparkline
+    -- Makes coingecko API request
+    -- Returns prices for 1d, 7d, 30d, 1y */
+app.get('/adaSpark', (req, res) => {
+    // ID
+    let ID = 'cardano';
+    
+    // Store timeframes
+    let now = helper.now(); // Current timestamp
+    let oneDay = helper.oneDay();
+    let sevenDay = helper.sevenDay();
+    let thirtyDay = helper.thirtyDay();
+    let year = helper.year();
+
+    // Store URL's
+    let dayURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${oneDay}&to=${now}`;
+    let weekURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${sevenDay}&to=${now}`;
+    let monthURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${thirtyDay}&to=${now}`;
+    let yearURL = `https://api.coingecko.com/api/v3/coins/${ID}/market_chart/range?vs_currency=usd&from=${year}&to=${now}`;
+    let priceURL = `https://api.coingecko.com/api/v3/simple/price?ids=${ID}&vs_currencies=usd`;
+
+    getSparkData(dayURL, weekURL, monthURL, yearURL, priceURL, ID)
+        .then(adaData => {
+            // Send Response
+            res.send(adaData);
+            console.log('Cardano Spark Sent');
+        });
+});
 
 
 // Listening on port 5000

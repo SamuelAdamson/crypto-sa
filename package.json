@@ -1,0 +1,26 @@
+{
+  "name": "crypto-sa",
+  "version": "1.0.0",
+  "description": "Crytpo Samuel Adamson",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SamuelAdamson/crypto-sa.git"
+  },
+  "author": "Samuel Adamson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SamuelAdamson/crypto-sa/issues"
+  },
+  "homepage": "https://github.com/SamuelAdamson/crypto-sa#readme",
+  "dependencies": {
+    "axios": "^0.23.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1"
+  }
+}

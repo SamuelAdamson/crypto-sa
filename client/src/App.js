@@ -2,6 +2,7 @@
 import './css/App.css';
 // React Router
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import ScrollToTop from './pages/components/ScrollToTop';
 import Navi from './pages/components/Navi';
 // Pages
 import Home from './pages/Home';
@@ -15,6 +16,7 @@ function App() {
 
             <Router> 
                 <Navi />
+                <ScrollToTop />
                 <Switch>
                     <Route exact path = "/" component={ Home } />
                     <Route exact path = "/ethereum" component={ Eth } />

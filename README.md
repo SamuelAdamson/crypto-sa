@@ -1,7 +1,6 @@
-Crypto -- Samuel Adamson
-Sparkline for Crypto Currencies and Portfolio
-    Expand to Deep Learning Predictive Modeling
-    Display using React Application
+### Crypto
+<strong> Sparkline for Crypto Currencies and Portfolio </strong> <br>
+In this project I utilized ReactJS and the Coin
 
 Author: Samuel Adamson
 Created: 10/14/2021

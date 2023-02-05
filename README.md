@@ -1,4 +1,4 @@
-### Crypto ([link](https://crypto-sparkline.herokuapp.com/))
+### Crypto (link expired)
 <strong> Sparkline for Crypto Currencies and Portfolio </strong> <br>
 In this project I utilized ReactJS, NodeJS, ExpressJS, ApexCharts, and the CoinGecko API to produce live updating sparklines for popular cryptocurrencies. Additional data like market cap, daily percentage change, and circulating supply is also provided on the site. <br>
 
